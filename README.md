@@ -1,4 +1,4 @@
-# Next.js Template [![NextJS][next-badge]][next] [![Node.js Version][node-badge]][node-url] [![TypeScript Version][typescript-badge]][typescript-url] [![License: MIT][license-badge]][license-url]
+# YouTube Soundtrack Downloader [![NextJS][next-badge]][next] [![Node.js Version][node-badge]][node-url] [![TypeScript Version][typescript-badge]][typescript-url] [![License: MIT][license-badge]][license-url]
 
 [next]: https://nextjs.org/
 [next-badge]: https://img.shields.io/badge/Next-black?style=flat&logo=next.js&logoColor=white
@@ -9,94 +9,95 @@
 [license-badge]: https://img.shields.io/badge/License-MIT-orange.svg
 [license-url]: https://opensource.org/licenses/MIT
 
-A modern Next.js template for building production-ready web applications.
+A simple app to download MP3 audio segments from long YouTube videos containing soundtracks.
 
 ![Artwork](./artwork.jpg)
 
-## What's Inside
+## Features
 
-This template provides:
+Extract audio segments from YouTube videos with precision:
 
-- **[Next.js v15](https://nextjs.org)** - with App Router and React v19
-- **[Vercel](https://vercel.com/guides/how-can-i-use-github-actions-with-vercel)** - for hosting and CI deployments
-- **[TypeScript v5](https://typescriptlang.org)** — type safety and enhanced developer experience
-- **[Tailwind CSS v4](https://tailwindcss.com)** — utility-first CSS framework for rapid styling
-- **[Bun](https://bun.sh)** — fast package manager and JavaScript runtime
-- **[BiomeJS](https://biomejs.dev)** — lightning-fast linting and formatting for TypeScript and JSON
-- **[Prettier](https://prettier.io)** — code formatting for Markdown and YAML files
-- **[Just](https://just.systems)** — command runner for streamlined task automation
-- **[Husky](https://typicode.github.io/husky)** - automated Git hooks for code quality
-- **[Knip](https://github.com/webpro/knip)** — unused code and dependency detection
-- **[Claude Code](https://anthropic.com/claude-code)** — `CLAUDE.md` file and MCP servers configuration
+- **Time-based extraction** - Download specific segments using MM:SS format timestamps
+- **320kbps MP3 output** - High-quality audio encoding via FFmpeg
+- **Seamless loop optimization** - Optional crossfade for perfect audio loops (50ms fade in/out)
+- **Stream processing** - Direct audio streaming without full file downloads
+- **Clean, responsive UI** - Dark mode support with Tailwind CSS
 
-Optimized for developer productivity and application performance.
+Built with modern web technologies:
 
-> [!NOTE]
->
-> Some of the configuration files depend upon the [Sablier DevKit](https://github.com/sablier-labs/devkit)
-
-## Getting Started
-
-Click the [`Use this template`](https://github.com/PaulRBerg/next-template/generate) button to create a new repository.
-
-Or clone manually:
-
-```bash
-git clone https://github.com/PaulRBerg/next-template.git my-app
-cd my-app
-```
-
-And then run:
-
-```bash
-bun install
-bun husky
-just --list
-```
-
-New to Next.js? Check out these resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Next.js GitHub repository](https://github.com/vercel/next.js)
+- **[Next.js v15](https://nextjs.org)** - App Router with React v19 Server Components
+- **[TypeScript v5](https://typescriptlang.org)** - Strict type safety with Zod validation
+- **[Tailwind CSS v4](https://tailwindcss.com)** - Utility-first styling with design tokens
+- **[yt-dlp](https://github.com/yt-dlp/yt-dlp)** - YouTube video download engine
+- **[FFmpeg](https://ffmpeg.org)** - Audio processing and format conversion
+- **[Bun](https://bun.sh)** - Fast package manager and JavaScript runtime
+- **[BiomeJS](https://biomejs.dev)** - Lightning-fast linting and formatting
+- **[Just](https://just.systems)** - Command runner for task automation
 
 ## Prerequisites
 
-- [Bun](https://bun.sh)
-- [Ni](https://github.com/antfu-collective/ni)
-- [Just](https://just.systems)
+- **[Bun](https://bun.sh)** - Package manager and runtime
+- **[Just](https://just.systems)** - Task runner
+- **[yt-dlp](https://github.com/yt-dlp/yt-dlp)** - Required for YouTube downloads
+- **[FFmpeg](https://ffmpeg.org)** - Required for audio processing
 
-## Usage
-
-Start the development server:
+### Installation
 
 ```bash
+# macOS (recommended)
+brew install bun just yt-dlp ffmpeg
+
+# Ubuntu/Debian
+curl -fsSL https://bun.sh/install | bash
+brew install just  # or use cargo install just
+sudo apt-get install yt-dlp ffmpeg
+
+# Windows
+# Install Bun: https://bun.sh/docs/installation
+# Install Just: https://github.com/casey/just#installation
+# Install yt-dlp and FFmpeg: https://github.com/yt-dlp/yt-dlp#installation
+```
+
+### Custom Paths
+
+Set environment variables for non-standard installations:
+
+- `YT_DLP_PATH` - Path to yt-dlp binary (default: `/opt/homebrew/bin/yt-dlp` on macOS)
+- `FFMPEG_PATH` - Path to ffmpeg binary (default: `/opt/homebrew/bin/ffmpeg` on macOS)
+
+## Getting Started
+
+Install dependencies and start the development server:
+
+```bash
+bun install
 just dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view your application.
+Open [http://localhost:3000](http://localhost:3000) and:
 
-### Vercel Deployment
+1. Paste a YouTube video URL
+2. Enter start and end times in MM:SS format (e.g., `05:30` to `15:45`)
+3. Optionally enable seamless loop optimization for crossfade
+4. Click "Download Audio" to process and download the MP3 segment
 
-To make the CI deployment workflow work, you have to configure these environment variables in your GitHub Actions
-secrets:
+The app uses yt-dlp to stream audio directly and FFmpeg to extract the segment without downloading the full video.
 
-- `VERCEL_ORG_ID`
-- `VERCEL_PROJECT_ID`
-- `VERCEL_TOKEN`
+## How It Works
 
-> [!TIP]
->
-> If you use the [`gh`](https://cli.github.com) CLI, you can put your environment variables in a `.env` file and then
-> run this command: `gh secret set -f .env`.
+1. **User Input** - Form validates YouTube URL and time range with Zod schema
+2. **Video Info** - yt-dlp fetches video metadata (title, duration) with Android player client for reliability
+3. **Audio Stream** - yt-dlp streams best audio format to stdout without disk I/O
+4. **FFmpeg Processing** - Extracts segment with optional crossfade (50ms fade in/out for loops)
+5. **Download** - Streams processed MP3 directly to browser with sanitized filename
 
-## Commands
+All processing happens server-side using Node.js streams for efficient memory usage.
 
-This template uses [Just](https://just.systems/) for task automation.
+## Development Commands
 
-### Development
+Run `just` to see all available commands.
 
-Make sure to run `bun install` first!
+### Core Tasks
 
 | Command      | Description              |
 | ------------ | ------------------------ |
@@ -105,61 +106,81 @@ Make sure to run `bun install` first!
 | `just start` | Start production server  |
 | `just clean` | Clean build artifacts    |
 
-### Code Linting
+### Code Quality
 
-| Command             | Description            |
-| ------------------- | ---------------------- |
-| `just biome-check`  | Check code with Biome  |
-| `just biome-format` | Format code with Biome |
-| `just full-check`   | Run all quality checks |
-| `just full-write`   | Fix all quality issues |
-
-### Other Commands
-
-Run `just` to see all available commands.
+| Command           | Description                            |
+| ----------------- | -------------------------------------- |
+| `just full-check` | Lint, format check, type check         |
+| `just full-write` | Auto-fix linting and formatting issues |
+| `just tsc-check`  | TypeScript validation only             |
 
 ## Project Structure
 
 ```tree
-├── app/                   # Next.js App Router directory
-│   ├── favicon.ico        # Favicon
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── public/                # Static files
-├── biome.jsonc            # Biome configuration
-├── justfile               # Just command definitions
-├── knip.jsonc             # Knip configuration
-├── next.config.js         # Next.js configuration
-├── package.json           # Package configuration
-├── postcss.config.js      # PostCSS configuration
-└── tsconfig.json          # TypeScript configuration
+├── app/
+│   ├── api/
+│   │   └── download/
+│   │       └── route.ts           # Audio download API endpoint
+│   ├── components/
+│   │   └── ui/
+│   │       └── button.tsx         # Reusable button component
+│   ├── favicon.ico
+│   ├── globals.css                # Global styles with Tailwind
+│   ├── layout.tsx                 # Root layout with dark mode support
+│   └── page.tsx                   # Main download form UI
+├── public/                        # Static assets
+├── biome.jsonc                    # Biome linter/formatter config
+├── justfile                       # Task automation scripts
+├── knip.jsonc                     # Dead code detection config
+├── next.config.js                 # Next.js configuration
+├── package.json                   # Dependencies and scripts
+├── postcss.config.js              # Tailwind CSS processing
+└── tsconfig.json                  # TypeScript strict mode config
 ```
 
-## Customization
+## Technical Details
 
-### Styling
+### Audio Processing
 
-Customize the design system by editing:
+- **Format**: MP3 with 320kbps encoding (libmp3lame)
+- **Loop Optimization**: 50ms crossfade using FFmpeg's `afade` filter
+- **Streaming**: Direct yt-dlp stdout → FFmpeg → PassThrough stream → Web ReadableStream
+- **No Disk I/O**: All processing happens in memory for speed and efficiency
 
-- `app/globals.css` — global styles and Tailwind directives
-- `postcss.config.js` — PostCSS configuration
+### API Endpoint
 
-### Linting and Formatting
+`POST /api/download`
 
-Code quality is enforced with Biome. See `biome.jsonc` for configuration.
+**Request:**
 
-### Dead Code Detection
+```json
+{
+  "url": "https://youtube.com/watch?v=...",
+  "startTime": 330,
+  "endTime": 945,
+  "optimizeLoop": true
+}
+```
 
-Knip detects unused dependencies and exports. See `knip.jsonc` for configuration.
+**Response:** Streaming MP3 file with `Content-Disposition` header
+
+### Error Handling
+
+- Validates YouTube URL format and time ranges with Zod
+- Checks segment duration against video length
+- Gracefully kills processes on stream cancellation
+- Returns detailed error messages for debugging
 
 ## Deployment
 
-Deploy easily with
-[Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme),
-the platform from Next.js creators.
+**Note:** This app requires yt-dlp and FFmpeg on the server. Vercel and most serverless platforms don't support these
+binaries by default.
 
-See the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for other options.
+Consider:
+
+- **VPS/Cloud VM** - AWS EC2, DigitalOcean Droplets, Hetzner
+- **Platform-as-a-Service** - Railway, Fly.io, Render (with custom Dockerfile)
+- **Containerized** - Docker with yt-dlp and FFmpeg included
 
 ## License
 

@@ -53,7 +53,7 @@ just tsc-check  # TypeScript validation only
 ### TypeScript
 
 - Always use strict mode
-- Prefer `interface` over `type` for object shapes
+- Prefer `type` over `interface` for object shapes
 - Use `satisfies` operator for type-safe constants
 - Avoid `any`; use `unknown` if type is truly unknown
 - Export types from dedicated `.types.ts` files
@@ -80,6 +80,7 @@ just tsc-check  # TypeScript validation only
 - Component variants with `tv` (tailwind-variants)
 - Dark mode support via `dark:` modifier
 - Consistent spacing scale
+- Always apply `cursor-pointer` to buttons and any clickable HTML elements
 
 ### Performance
 
@@ -98,7 +99,7 @@ just tsc-check  # TypeScript validation only
 import { tv } from "tailwind-variants";
 
 const button = tv({
-  base: "font-medium rounded-lg transition-colors",
+  base: "font-medium rounded-lg transition-colors cursor-pointer",
   variants: {
     variant: {
       primary: "bg-blue-500 text-white hover:bg-blue-600",

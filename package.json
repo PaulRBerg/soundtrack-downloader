@@ -1,16 +1,18 @@
 {
-  "name": "@prb/next-template",
-  "description": "Next.js template for building web applications.",
+  "name": "soundtrack-downloader",
+  "description": "Download MP3 audio segments from YouTube videos",
   "version": "1.0.0",
   "dependencies": {
     "@biomejs/biome": "^2.2.2",
     "@sablier/devkit": "github:sablier-labs/devkit#main",
     "@tailwindcss/postcss": "^4.1.12",
+    "@types/fluent-ffmpeg": "^2.1.27",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
+    "fluent-ffmpeg": "^2.1.3",
     "husky": "^9.1.7",
     "knip": "^5.63.0",
     "lint-staged": "^16.1.5",
@@ -24,6 +26,7 @@
     "tailwindcss": "^4.1.12",
     "typescript": "^5.9.2",
     "vercel": "^46.0.4",
+    "youtube-dl-exec": "^3.0.25",
     "zod": "^4.1.5"
   },
   "engines": {
@@ -33,5 +36,10 @@
   "scripts": {
     "build": "next build",
     "prepare": "husky"
-  }
+  },
+  "trustedDependencies": [
+    "@tailwindcss/oxide",
+    "oxc-resolver",
+    "youtube-dl-exec"
+  ]
 }
